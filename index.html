@@ -1,61 +1,997 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Filhos de Marte: Relíquias da Verdade</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+import React, { useEffect } from 'react';
 
-  <header class="hero">
-    <div class="overlay">
-      <h1>FILHOS DE MARTE</h1>
-      <p class="subtitle">Relíquias da Verdade</p>
-      <p class="tagline">Quando a verdade foi enterrada, o legado sobreviveu.</p>
-      <div class="buttons">
-        <a href="#about" class="btn primary">Conheça a História</a>
-        <a href="#chapter" class="btn secondary">Leia o Primeiro Capítulo</a>
+export default function FilhosDeMarte() {
+  useEffect(() => {
+    // Smooth scroll for anchor links
+    const handleAnchorClick = (e) => {
+      const href = e.target.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', handleAnchorClick);
+    });
+
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fdm-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fdm-fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Parallax effect on scroll
+    const handleScroll = () => {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.fdm-parallax');
+      parallaxElements.forEach(el => {
+        const speed = 0.3;
+        el.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.removeEventListener('click', handleAnchorClick);
+      });
+    };
+  }, []);
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+        /* ===== CSS VARIABLES ===== */
+        :root {
+          --fdm-mars-red: #8B2500;
+          --fdm-mars-orange: #A0522D;
+          --fdm-burnt-orange: #CC5500;
+          --fdm-deep-black: #0a0a0a;
+          --fdm-charcoal: #1a1a1a;
+          --fdm-dark-grey: #2d2d2d;
+          --fdm-medium-grey: #4a4a4a;
+          --fdm-gold: #C9A227;
+          --fdm-copper: #B87333;
+          --fdm-ancient-gold: #D4A84B;
+          --fdm-text-light: #e8e4dc;
+          --fdm-text-muted: #9a9590;
+          --fdm-font-display: 'Cinzel', serif;
+          --fdm-font-body: 'Cormorant Garamond', serif;
+        }
+
+        /* ===== RESET & BASE ===== */
+        .fdm-landing * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .fdm-landing {
+          background-color: var(--fdm-deep-black);
+          color: var(--fdm-text-light);
+          font-family: var(--fdm-font-body);
+          font-size: 18px;
+          line-height: 1.8;
+          overflow-x: hidden;
+        }
+
+        .fdm-landing h1,
+        .fdm-landing h2,
+        .fdm-landing h3,
+        .fdm-landing h4 {
+          font-family: var(--fdm-font-display);
+          font-weight: 500;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+        }
+
+        .fdm-landing a {
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.3s ease;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .fdm-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+
+        .fdm-fade-in {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fdm-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .fdm-hero {
+          position: relative;
+          height: 100vh;
+          min-height: 700px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .fdm-hero-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: 
+            linear-gradient(
+              to bottom,
+              rgba(10, 10, 10, 0.3) 0%,
+              rgba(10, 10, 10, 0.5) 50%,
+              rgba(10, 10, 10, 0.95) 100%
+            ),
+            url('https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=1920&q=80') center/cover no-repeat;
+          filter: saturate(1.2) contrast(1.1);
+        }
+
+        .fdm-hero-dust {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: 
+            radial-gradient(ellipse at 30% 70%, rgba(139, 37, 0, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 30%, rgba(160, 82, 45, 0.1) 0%, transparent 40%);
+          pointer-events: none;
+        }
+
+        .fdm-hero-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          padding: 40px;
+        }
+
+        .fdm-hero-subtitle-top {
+          font-family: var(--fdm-font-body);
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.4em;
+          text-transform: uppercase;
+          color: var(--fdm-copper);
+          margin-bottom: 20px;
+          opacity: 0;
+          animation: fdm-fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .fdm-hero-title {
+          font-size: clamp(48px, 10vw, 120px);
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          line-height: 1.1;
+          margin-bottom: 20px;
+          background: linear-gradient(
+            135deg,
+            var(--fdm-text-light) 0%,
+            var(--fdm-ancient-gold) 50%,
+            var(--fdm-text-light) 100%
+          );
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          opacity: 0;
+          animation: fdm-fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .fdm-hero-subtitle {
+          font-family: var(--fdm-font-display);
+          font-size: clamp(18px, 3vw, 28px);
+          font-weight: 400;
+          letter-spacing: 0.25em;
+          color: var(--fdm-copper);
+          margin-bottom: 40px;
+          opacity: 0;
+          animation: fdm-fadeInUp 1s ease 0.7s forwards;
+        }
+
+        .fdm-hero-tagline {
+          font-family: var(--fdm-font-body);
+          font-size: clamp(18px, 2.5vw, 24px);
+          font-style: italic;
+          font-weight: 400;
+          color: var(--fdm-text-muted);
+          max-width: 600px;
+          margin: 0 auto 50px;
+          line-height: 1.6;
+          opacity: 0;
+          animation: fdm-fadeInUp 1s ease 0.9s forwards;
+        }
+
+        .fdm-hero-cta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          justify-content: center;
+          opacity: 0;
+          animation: fdm-fadeInUp 1s ease 1.1s forwards;
+        }
+
+        .fdm-btn {
+          font-family: var(--fdm-font-display);
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          padding: 18px 40px;
+          border: none;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.4s ease;
+        }
+
+        .fdm-btn-primary {
+          background: linear-gradient(135deg, var(--fdm-mars-red), var(--fdm-burnt-orange));
+          color: var(--fdm-text-light);
+          box-shadow: 0 4px 30px rgba(139, 37, 0, 0.4);
+        }
+
+        .fdm-btn-primary:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 40px rgba(139, 37, 0, 0.6);
+        }
+
+        .fdm-btn-secondary {
+          background: transparent;
+          color: var(--fdm-text-light);
+          border: 1px solid var(--fdm-medium-grey);
+        }
+
+        .fdm-btn-secondary:hover {
+          border-color: var(--fdm-copper);
+          color: var(--fdm-copper);
+        }
+
+        .fdm-scroll-indicator {
+          position: absolute;
+          bottom: 40px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          opacity: 0;
+          animation: fdm-fadeIn 1s ease 1.5s forwards, fdm-float 2s ease-in-out infinite 1.5s;
+        }
+
+        .fdm-scroll-indicator span {
+          font-size: 11px;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: var(--fdm-text-muted);
+        }
+
+        .fdm-scroll-line {
+          width: 1px;
+          height: 60px;
+          background: linear-gradient(to bottom, var(--fdm-copper), transparent);
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .fdm-about {
+          padding: 150px 0;
+          background: 
+            linear-gradient(180deg, var(--fdm-deep-black) 0%, var(--fdm-charcoal) 100%);
+          position: relative;
+        }
+
+        .fdm-about::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+          opacity: 0.03;
+          pointer-events: none;
+        }
+
+        .fdm-about-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 80px;
+          align-items: center;
+        }
+
+        .fdm-section-label {
+          font-size: 11px;
+          letter-spacing: 0.4em;
+          text-transform: uppercase;
+          color: var(--fdm-copper);
+          margin-bottom: 20px;
+          display: block;
+        }
+
+        .fdm-section-title {
+          font-size: clamp(32px, 5vw, 48px);
+          margin-bottom: 40px;
+          line-height: 1.2;
+        }
+
+        .fdm-about-text {
+          font-size: 20px;
+          line-height: 2;
+          color: var(--fdm-text-muted);
+        }
+
+        .fdm-about-text p {
+          margin-bottom: 30px;
+        }
+
+        .fdm-quote {
+          position: relative;
+          padding: 40px;
+          background: linear-gradient(135deg, rgba(139, 37, 0, 0.1), rgba(184, 115, 51, 0.05));
+          border-left: 2px solid var(--fdm-copper);
+        }
+
+        .fdm-quote-text {
+          font-size: 24px;
+          font-style: italic;
+          line-height: 1.8;
+          color: var(--fdm-text-light);
+          margin-bottom: 20px;
+        }
+
+        .fdm-quote-author {
+          font-size: 14px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: var(--fdm-copper);
+        }
+
+        /* ===== UNIVERSE SECTION ===== */
+        .fdm-universe {
+          padding: 150px 0;
+          background: var(--fdm-charcoal);
+          position: relative;
+        }
+
+        .fdm-universe-header {
+          text-align: center;
+          margin-bottom: 80px;
+        }
+
+        .fdm-universe-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 30px;
+        }
+
+        .fdm-universe-card {
+          position: relative;
+          padding: 50px 30px;
+          background: linear-gradient(180deg, var(--fdm-dark-grey), var(--fdm-charcoal));
+          border: 1px solid var(--fdm-dark-grey);
+          text-align: center;
+          transition: all 0.5s ease;
+          overflow: hidden;
+        }
+
+        .fdm-universe-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--fdm-copper), transparent);
+          transform: scaleX(0);
+          transition: transform 0.5s ease;
+        }
+
+        .fdm-universe-card:hover::before {
+          transform: scaleX(1);
+        }
+
+        .fdm-universe-card:hover {
+          transform: translateY(-10px);
+          border-color: var(--fdm-medium-grey);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .fdm-card-icon {
+          width: 60px;
+          height: 60px;
+          margin: 0 auto 30px;
+          position: relative;
+        }
+
+        .fdm-card-icon svg {
+          width: 100%;
+          height: 100%;
+          stroke: var(--fdm-copper);
+          stroke-width: 1;
+          fill: none;
+        }
+
+        .fdm-card-title {
+          font-size: 16px;
+          letter-spacing: 0.2em;
+          margin-bottom: 20px;
+          color: var(--fdm-text-light);
+        }
+
+        .fdm-card-text {
+          font-size: 16px;
+          line-height: 1.8;
+          color: var(--fdm-text-muted);
+        }
+
+        .fdm-divider {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          margin: 80px 0;
+        }
+
+        .fdm-divider-line {
+          width: 100px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--fdm-medium-grey));
+        }
+
+        .fdm-divider-line:last-child {
+          background: linear-gradient(90deg, var(--fdm-medium-grey), transparent);
+        }
+
+        .fdm-divider-symbol {
+          width: 12px;
+          height: 12px;
+          border: 1px solid var(--fdm-copper);
+          transform: rotate(45deg);
+        }
+
+        /* ===== WHY READ SECTION ===== */
+        .fdm-why {
+          padding: 150px 0;
+          background: var(--fdm-deep-black);
+          position: relative;
+        }
+
+        .fdm-why::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: 
+            radial-gradient(ellipse at 20% 50%, rgba(139, 37, 0, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(184, 115, 51, 0.05) 0%, transparent 40%);
+          pointer-events: none;
+        }
+
+        .fdm-why-header {
+          text-align: center;
+          margin-bottom: 80px;
+        }
+
+        .fdm-why-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 60px 80px;
+        }
+
+        .fdm-why-item {
+          display: flex;
+          gap: 30px;
+          align-items: flex-start;
+        }
+
+        .fdm-why-number {
+          font-family: var(--fdm-font-display);
+          font-size: 48px;
+          font-weight: 300;
+          color: var(--fdm-copper);
+          opacity: 0.5;
+          line-height: 1;
+        }
+
+        .fdm-why-content h3 {
+          font-size: 18px;
+          letter-spacing: 0.15em;
+          margin-bottom: 15px;
+          color: var(--fdm-ancient-gold);
+        }
+
+        .fdm-why-content p {
+          font-size: 17px;
+          line-height: 1.8;
+          color: var(--fdm-text-muted);
+        }
+
+        /* ===== AUTHOR SECTION ===== */
+        .fdm-author {
+          padding: 150px 0;
+          background: linear-gradient(180deg, var(--fdm-deep-black) 0%, var(--fdm-charcoal) 100%);
+        }
+
+        .fdm-author-content {
+          max-width: 700px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .fdm-author-text {
+          font-size: 20px;
+          line-height: 2;
+          color: var(--fdm-text-muted);
+        }
+
+        .fdm-author-text p {
+          margin-bottom: 30px;
+        }
+
+        .fdm-author-signature {
+          font-family: var(--fdm-font-body);
+          font-size: 28px;
+          font-style: italic;
+          color: var(--fdm-copper);
+          margin-top: 40px;
+        }
+
+        /* ===== FINAL CTA SECTION ===== */
+        .fdm-final-cta {
+          position: relative;
+          padding: 200px 0;
+          overflow: hidden;
+        }
+
+        .fdm-final-cta-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: 
+            linear-gradient(
+              to bottom,
+              rgba(10, 10, 10, 0.9) 0%,
+              rgba(10, 10, 10, 0.7) 50%,
+              rgba(10, 10, 10, 0.95) 100%
+            ),
+            url('https://images.unsplash.com/photo-1545156521-77bd85671d30?w=1920&q=80') center/cover no-repeat;
+          filter: saturate(1.3);
+        }
+
+        .fdm-final-cta-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+        }
+
+        .fdm-final-cta-title {
+          font-size: clamp(28px, 5vw, 48px);
+          margin-bottom: 20px;
+          line-height: 1.3;
+        }
+
+        .fdm-final-cta-subtitle {
+          font-size: 20px;
+          font-style: italic;
+          color: var(--fdm-text-muted);
+          margin-bottom: 50px;
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .fdm-btn-large {
+          padding: 25px 60px;
+          font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        .fdm-footer {
+          padding: 60px 0;
+          background: var(--fdm-deep-black);
+          border-top: 1px solid var(--fdm-dark-grey);
+          text-align: center;
+        }
+
+        .fdm-footer-text {
+          font-size: 13px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: var(--fdm-text-muted);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fdm-fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fdm-fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes fdm-float {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+          .fdm-about-grid {
+            grid-template-columns: 1fr;
+            gap: 60px;
+          }
+
+          .fdm-universe-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .fdm-why-grid {
+            gap: 40px 60px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .fdm-container {
+            padding: 0 25px;
+          }
+
+          .fdm-hero-content {
+            padding: 20px;
+          }
+
+          .fdm-hero-cta {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .fdm-btn {
+            width: 100%;
+            max-width: 300px;
+          }
+
+          .fdm-universe-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .fdm-why-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .fdm-why-item {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+          }
+
+          .fdm-about,
+          .fdm-universe,
+          .fdm-why,
+          .fdm-author {
+            padding: 100px 0;
+          }
+
+          .fdm-final-cta {
+            padding: 120px 0;
+          }
+
+          .fdm-quote {
+            padding: 30px 20px;
+          }
+
+          .fdm-quote-text {
+            font-size: 20px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .fdm-hero-subtitle-top {
+            font-size: 11px;
+            letter-spacing: 0.3em;
+          }
+
+          .fdm-section-title {
+            font-size: 28px;
+          }
+
+          .fdm-card-title {
+            font-size: 14px;
+          }
+
+          .fdm-btn-large {
+            padding: 20px 40px;
+          }
+        }
+      `}</style>
+
+      <div className="fdm-landing">
+        {/* ===== HERO SECTION ===== */}
+        <section className="fdm-hero">
+          <div className="fdm-hero-bg fdm-parallax"></div>
+          <div className="fdm-hero-dust"></div>
+          
+          <div className="fdm-hero-content">
+            <span className="fdm-hero-subtitle-top">A Science Fiction Epic</span>
+            <h1 className="fdm-hero-title">Filhos de Marte</h1>
+            <h2 className="fdm-hero-subtitle">Relíquias da Verdade</h2>
+            <p className="fdm-hero-tagline">
+              "In the red dust of a forgotten world, ancient secrets await those brave enough to unearth them."
+            </p>
+            <div className="fdm-hero-cta">
+              <button className="fdm-btn fdm-btn-primary">Discover the Story</button>
+              <button className="fdm-btn fdm-btn-secondary">Read the First Chapter</button>
+            </div>
+          </div>
+
+          <div className="fdm-scroll-indicator">
+            <span>Scroll</span>
+            <div className="fdm-scroll-line"></div>
+          </div>
+        </section>
+
+        {/* ===== ABOUT SECTION ===== */}
+        <section className="fdm-about" id="about">
+          <div className="fdm-container">
+            <div className="fdm-about-grid">
+              <div className="fdm-fade-in">
+                <span className="fdm-section-label">The Book</span>
+                <h2 className="fdm-section-title">About the Story</h2>
+                <div className="fdm-about-text">
+                  <p>
+                    Centuries after humanity's first steps on Mars, the red planet holds 
+                    secrets that predate our arrival. Beneath the rust-colored dunes and 
+                    ancient craters lie relics of a truth so profound, it threatens to 
+                    reshape everything we believe about our origins.
+                  </p>
+                  <p>
+                    When archaeologist Dr. Elena Vasquez discovers an impossible artifact 
+                    buried deep within Valles Marineris, she sets in motion a chain of 
+                    events that will pit science against faith, empires against outcasts, 
+                    and the children of Earth against the children of Mars.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="fdm-fade-in">
+                <div className="fdm-quote">
+                  <p className="fdm-quote-text">
+                    "We came to Mars seeking a new beginning. Instead, we found an ending 
+                    that had been waiting for us for millennia."
+                  </p>
+                  <span className="fdm-quote-author">— From the Archives of the First Expedition</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== UNIVERSE SECTION ===== */}
+        <section className="fdm-universe" id="universe">
+          <div className="fdm-container">
+            <div className="fdm-universe-header fdm-fade-in">
+              <span className="fdm-section-label">Explore</span>
+              <h2 className="fdm-section-title">The Universe</h2>
+            </div>
+
+            <div className="fdm-universe-grid">
+              <div className="fdm-universe-card fdm-fade-in">
+                <div className="fdm-card-icon">
+                  <svg viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="20"/>
+                    <path d="M30 10 L30 15 M30 45 L30 50 M10 30 L15 30 M45 30 L50 30"/>
+                    <circle cx="30" cy="30" r="8"/>
+                  </svg>
+                </div>
+                <h3 className="fdm-card-title">Ancient Mars</h3>
+                <p className="fdm-card-text">
+                  Before the terraformers came, Mars held civilizations we never imagined. 
+                  Their echoes remain, waiting in the silence.
+                </p>
+              </div>
+
+              <div className="fdm-universe-card fdm-fade-in">
+                <div className="fdm-card-icon">
+                  <svg viewBox="0 0 60 60">
+                    <path d="M30 5 L45 55 L5 25 L55 25 L15 55 Z"/>
+                  </svg>
+                </div>
+                <h3 className="fdm-card-title">The Fall</h3>
+                <p className="fdm-card-text">
+                  A cataclysm erased them from existence. The question that haunts us: 
+                  did they bring it upon themselves, or was it brought upon them?
+                </p>
+              </div>
+
+              <div className="fdm-universe-card fdm-fade-in">
+                <div className="fdm-card-icon">
+                  <svg viewBox="0 0 60 60">
+                    <rect x="15" y="20" width="30" height="35" rx="2"/>
+                    <path d="M20 5 L40 5 L40 20 L20 20 Z"/>
+                    <line x1="22" y1="30" x2="38" y2="30"/>
+                    <line x1="22" y1="38" x2="38" y2="38"/>
+                    <line x1="22" y1="46" x2="32" y2="46"/>
+                  </svg>
+                </div>
+                <h3 className="fdm-card-title">The Relics</h3>
+                <p className="fdm-card-text">
+                  Artifacts of impossible technology and terrifying purpose. Each one a 
+                  puzzle piece to a truth humanity may not be ready to face.
+                </p>
+              </div>
+
+              <div className="fdm-universe-card fdm-fade-in">
+                <div className="fdm-card-icon">
+                  <svg viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25"/>
+                    <circle cx="30" cy="30" r="15"/>
+                    <circle cx="30" cy="30" r="5"/>
+                    <line x1="30" y1="5" x2="30" y2="15"/>
+                    <line x1="30" y1="45" x2="30" y2="55"/>
+                  </svg>
+                </div>
+                <h3 className="fdm-card-title">The Hidden Truth</h3>
+                <p className="fdm-card-text">
+                  Some truths are buried for a reason. But the children of Mars are 
+                  determined to unearth them, whatever the cost.
+                </p>
+              </div>
+            </div>
+
+            <div className="fdm-divider">
+              <div className="fdm-divider-line"></div>
+              <div className="fdm-divider-symbol"></div>
+              <div className="fdm-divider-line"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== WHY READ SECTION ===== */}
+        <section className="fdm-why" id="why">
+          <div className="fdm-container">
+            <div className="fdm-why-header fdm-fade-in">
+              <span className="fdm-section-label">Experience</span>
+              <h2 className="fdm-section-title">Why Read This Book</h2>
+            </div>
+
+            <div className="fdm-why-grid">
+              <div className="fdm-why-item fdm-fade-in">
+                <span className="fdm-why-number">01</span>
+                <div className="fdm-why-content">
+                  <h3>Deep Adult Science Fiction</h3>
+                  <p>
+                    A mature narrative that doesn't shy away from complex philosophical 
+                    questions about existence, purpose, and humanity's place in the cosmos.
+                  </p>
+                </div>
+              </div>
+
+              <div className="fdm-why-item fdm-fade-in">
+                <span className="fdm-why-number">02</span>
+                <div className="fdm-why-content">
+                  <h3>Archaeological Mystery</h3>
+                  <p>
+                    Layer by layer, discovery by discovery, unravel a mystery that spans 
+                    millions of years and challenges everything we know.
+                  </p>
+                </div>
+              </div>
+
+              <div className="fdm-why-item fdm-fade-in">
+                <span className="fdm-why-number">03</span>
+                <div className="fdm-why-content">
+                  <h3>Science Versus Faith</h3>
+                  <p>
+                    When evidence contradicts belief, which do we choose? Characters 
+                    grapple with truths that shatter worldviews.
+                  </p>
+                </div>
+              </div>
+
+              <div className="fdm-why-item fdm-fade-in">
+                <span className="fdm-why-number">04</span>
+                <div className="fdm-why-content">
+                  <h3>Cinematic Storytelling</h3>
+                  <p>
+                    Vivid, immersive prose that paints every scene in rich detail. 
+                    A story meant to be experienced, not just read.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== AUTHOR SECTION ===== */}
+        <section className="fdm-author" id="author">
+          <div className="fdm-container">
+            <div className="fdm-author-content fdm-fade-in">
+              <span className="fdm-section-label">The Writer</span>
+              <h2 className="fdm-section-title">About the Author</h2>
+              <div className="fdm-author-text">
+                <p>
+                  A lifelong student of the cosmos and the human condition, I have spent 
+                  years contemplating our place among the stars. "Filhos de Marte" is 
+                  the culmination of these meditations—a story that asks the questions 
+                  I have always been afraid to answer.
+                </p>
+                <p>
+                  This is not a story of heroes and villains, but of seekers and the 
+                  truths they find. I invite you to join them on their journey across 
+                  the red sands of Mars, into the depths of mysteries older than humanity itself.
+                </p>
+              </div>
+              <p className="fdm-author-signature">— The Author</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== FINAL CTA SECTION ===== */}
+        <section className="fdm-final-cta">
+          <div className="fdm-final-cta-bg"></div>
+          <div className="fdm-container">
+            <div className="fdm-final-cta-content fdm-fade-in">
+              <h2 className="fdm-final-cta-title">Begin Your Journey</h2>
+              <p className="fdm-final-cta-subtitle">
+                The red planet awaits. The relics call. Will you answer?
+              </p>
+              <button className="fdm-btn fdm-btn-primary fdm-btn-large">
+                Discover Filhos de Marte
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== FOOTER ===== */}
+        <footer className="fdm-footer">
+          <div className="fdm-container">
+            <p className="fdm-footer-text">
+              Filhos de Marte — Relíquias da Verdade
+            </p>
+          </div>
+        </footer>
       </div>
-    </div>
-  </header>
-
-  <main>
-    <section id="about" class="section dark-section">
-      <h2>Sobre o Livro</h2>
-      <p>Marte não morreu. Ele foi silenciado. Uma civilização antiga deixou fragmentos da verdade espalhados pelo tempo.</p>
-    </section>
-
-    <section id="universe" class="section">
-      <h2>O Universo</h2>
-      <div class="cards">
-        <div class="card"><h3>Marte Antigo</h3><p>Histórias gravadas em pedras e vento.</p></div>
-        <div class="card"><h3>A Queda</h3><p>O dia em que a civilização se perdeu.</p></div>
-        <div class="card"><h3>As Relíquias</h3><p>Artefatos que ninguém deveria encontrar.</p></div>
-        <div class="card"><h3>A Verdade Oculta</h3><p>Somente os corajosos se aproximam.</p></div>
-      </div>
-    </section>
-
-    <section id="why" class="section dark-section">
-      <h2>Por que ler?</h2>
-      <ul>
-        <li>Ficção Científica Profunda</li>
-        <li>Mistério Arqueológico</li>
-        <li>Ciência vs Fé</li>
-        <li>Narração Cinematográfica</li>
-      </ul>
-    </section>
-
-    <section id="author" class="section">
-      <h2>Sobre o Autor</h2>
-      <p>Um contador de histórias com alma marciana e olhar para o infinito.</p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© 2025 Filhos de Marte. Todos os direitos reservados.</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+    </>
+  );
+}
