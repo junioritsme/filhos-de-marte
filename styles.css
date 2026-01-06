@@ -142,15 +142,7 @@ a {
     letter-spacing: 0.25em;
     line-height: 1.05;
     margin-bottom: 20px;
-    background: linear-gradient(
-        135deg,
-        var(--fdm-text-light) 100%,
-        var(--fdm-ancient-gold) 0%,
-        var(--fdm-text-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(fdm-text-light);
 }
 
 .fdm-hero-subtitle {
@@ -686,4 +678,5 @@ a {
     .fdm-btn-large {
         padding: 20px 40px;
     }
+
 }
