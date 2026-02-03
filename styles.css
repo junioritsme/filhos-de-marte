@@ -79,12 +79,12 @@ a {
 /* ===== HERO SECTION ===== */
 .fdm-hero {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     min-height: 700px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    padding: 120px 0;
 }
 
 .fdm-hero-bg {
@@ -721,5 +721,6 @@ a {
         margin: 0 auto;
     }
 }
+
 
 
