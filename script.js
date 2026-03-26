@@ -119,4 +119,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     window.scrollTo(0, 0);
 
+    // ===== MODAL LOGIC =====
+    const btnCompreAgora = document.getElementById('btnCompreAgora');
+    const modalCompra = document.getElementById('modalCompra');
+    const modalClose = document.querySelector('.fdm-modal-close');
+
+    if (btnCompreAgora && modalCompra && modalClose) {
+        btnCompreAgora.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalCompra.style.display = 'flex';
+            setTimeout(() => {
+                modalCompra.classList.add('fdm-modal-show');
+            }, 10);
+        });
+
+        const closeModal = () => {
+            modalCompra.classList.remove('fdm-modal-show');
+            setTimeout(() => {
+                modalCompra.style.display = 'none';
+            }, 300);
+        };
+
+        modalClose.addEventListener('click', closeModal);
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modalCompra) {
+                closeModal();
+            }
+        });
+    }
+
 });
